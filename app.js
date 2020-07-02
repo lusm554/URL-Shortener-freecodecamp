@@ -4,6 +4,7 @@ const express = require('express');
 const shortId = require('shortid');
 const validUrl = require('valid-url');
 const app = express();
+const port = process.env.PORT;
 
 mongoose.connect(process.env.MONGOID, {useNewUrlParser: true, useUnifiedTopology: true});
 
@@ -13,7 +14,7 @@ app.use('/' ,express.static(__dirname + '/public'));
 let url_schema = new mongoose.Schema({url: String, short: String});
 let url_model = mongoose.model('ListUrl', url_schema);
 
-app.get('/new/:url(*)', (req, res) => {
+app.get('/api/new/:url(*)', (req, res) => {
     let url = req.params.url;
 
     if(validUrl.isUri(url)) {
@@ -23,24 +24,30 @@ app.get('/new/:url(*)', (req, res) => {
         new url_model({url: url, short: shortid}).save((err, result) => {
             if(err) throw err;
 
-            res.json(result);
+            res.json({
+                original_url: url, 
+                // short_url: `http://${req.hostname}/${shortid}`
+                short_url: `http://localhost:${port||3000}/${shortid}`
+            });
         })
 
     }else {
-        res.json('not valid url');
+        res.json({error:"invalid URL"})
     }
 })
 
-app.listen(process.env.PORT || 3000);
+app.get('/:id', (req, res) => {
+    url_model.find({short: req.params.id}, (err, result) => {
+        if(err) {
+            return res.status(400).send('not found');
+        };
 
-/**
- * /new
- * 1. Check the url 
- * 2. Create shortId for this url 
- * 3. Write this to db
- * 
- * /:id
- * 1. Get url from query line
- * 2. Get document from this url
- * 3. Send json to user
- */
+        let url = result[0].url;
+
+        res.redirect(url);
+    })
+})
+
+app.listen(port || 3000);
+
+// <a href="/">~</a>
