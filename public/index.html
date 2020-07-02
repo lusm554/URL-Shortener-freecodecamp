@@ -13,25 +13,16 @@
       <div class="container">
         <h3>Short URL Creation </h3>
         <p>
-          example: <code>POST <a href="http://localhost:3000/api/new/https://google.com" target="_blank">http://localhost:3000/api/newhttps://google.com</a></code> - <code>https://www.google.com</code>
+          example: <code>POST <a href="http://localhost:3000/new/https://google.com" target="_blank">http://localhost:3000/new/https://google.com</a></code> - <code>https://www.google.com</code>
         </p>
-        <form action="api/shorturl/new" method="POST">
+        <form action="http://localhost:3000/new/">    
           <label for="url_input">URL to be shortened</label>
-          <input id="url_input" type="text" name="url" value="https://www.freecodecamp.org">
+          <input id="url_input" type="text" name="url" value="https://github.com/">
           <input type="submit" value="POST URL">
         </form>
-        <h3>Example Usage:</h3>
-        <a href="https://thread-paper.glitch.me/api/shorturl/3">
-          [this_project_url]/api/shorturl/3
-        </a>
-
-        <h3>Will Redirect to:</h3>
-        <p>https://www.freecodecamp.org/forum/</p>
       </div>
       <div class="footer">
-        <p>
-          by <a href="https://www.freecodecamp.org">freeCodeCamp</a>
-        </p>
+
       </div>
    </body>
 

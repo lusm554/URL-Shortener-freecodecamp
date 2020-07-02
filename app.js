@@ -14,8 +14,8 @@ app.use('/' ,express.static(__dirname + '/public'));
 let url_schema = new mongoose.Schema({url: String, short: String});
 let url_model = mongoose.model('ListUrl', url_schema);
 
-app.get('/api/new/:url(*)', (req, res) => {
-    let url = req.params.url;
+app.get('/new/:url(*)', (req, res) => {
+    let url = req.params.url == '' ? req.query.url : req.params.url;
 
     if(validUrl.isUri(url)) {
 
@@ -26,8 +26,7 @@ app.get('/api/new/:url(*)', (req, res) => {
 
             res.json({
                 original_url: url, 
-                // short_url: `http://${req.hostname}/${shortid}`
-                short_url: `http://localhost:${port||3000}/${shortid}`
+                short_url: `http://localhost:${port||3000}/api/${shortid}`  
             });
         })
 
@@ -36,7 +35,7 @@ app.get('/api/new/:url(*)', (req, res) => {
     }
 })
 
-app.get('/:id', (req, res) => {
+app.get('/api/:id', (req, res) => {
     url_model.find({short: req.params.id}, (err, result) => {
         if(err) {
             return res.status(400).send('not found');
@@ -49,5 +48,3 @@ app.get('/:id', (req, res) => {
 })
 
 app.listen(port || 3000);
-
-// <a href="/">~</a>
