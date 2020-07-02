@@ -26,7 +26,7 @@ app.get('/new/:url(*)', (req, res) => {
 
             res.json({
                 original_url: url, 
-                short_url: `http://localhost:${port||3000}/api/${shortid}`  
+                short_url: `http://localhost:${port||3000}/api/${shortid}`
             });
         })
 
